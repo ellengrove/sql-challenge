@@ -19,24 +19,25 @@ CREATE TABLE salaries (
 	emp_no VARCHAR(6) PRIMARY KEY NOT NULL,
 	salary FLOAT NOT NULL,
 	FOREIGN KEY (emp_no) REFERENCES employees(emp_no));
+	
+-- departments.csv
+CREATE TABLE departments (
+	dept_no VARCHAR(4) PRIMARY KEY NOT NULL,
+	dept_name VARCHAR(20) NOT NULL);
 
 -- dept_emp.csv
--- TO FIX: can't have multiple primary keys
--- COMPOSITE KEY WON'T WORK EITHER
 CREATE TABLE dept_emp (
-	emp_no VARCHAR(6) PRIMARY KEY NOT NULL,
-	dept_no VARCHAR(4) PRIMARY KEY NOT NULL,
-	FOREIGN KEY (emp_no) REFERENCES employees(emp_no));
+	emp_no VARCHAR(6) NOT NULL,
+	dept_no VARCHAR(4) NOT NULL,
+	FOREIGN KEY (dept_no) REFERENCES departments(dept_no),
+	FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
+	CONSTRAINT emp_dept PRIMARY KEY (emp_no, dept_no));
 
 -- dept_manager.csv
 CREATE TABLE dept_manager (
 	dept_no VARCHAR(4) NOT NULL,
-	emp_no VARCHAR(6) PRIMARY KEY NOT NULL,
-	FOREIGN KEY (dept_no) REFERENCES dept_emp(dept_no));
+	emp_no VARCHAR(6) NOT NULL,
+	CONSTRAINT manager PRIMARY KEY (emp_no, dept_no),
+	FOREIGN KEY (emp_no, dept_no) REFERENCES dept_emp(emp_no, dept_no));
 
--- departments.csv
-CREATE TABLE departments (
-	dept_no VARCHAR(4) PRIMARY KEY NOT NULL,
-	dept_name VARCHAR(20) NOT NULL,
-	FOREIGN KEY (dept_no) REFERENCES dept_emp(dept_no));
 	
